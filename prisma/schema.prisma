@@ -9,3 +9,75 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id         String       @id @default(cuid())
+  createdAt  DateTime
+  updatedAt  DateTime
+  email      String       @unique
+  name       String
+  Permission Permission[]
+}
+
+model Permission {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  roles     Role[]
+  userId    String
+}
+
+model Role {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime
+  updatedAt    DateTime
+  name         String
+  Permission   Permission? @relation(fields: [permissionId], references: [id])
+  permissionId Int?
+}
+
+model Product {
+  id                Int             @id @default(autoincrement())
+  createdAt         DateTime
+  updatedAt         DateTime
+  name              String
+  category          ProductCategory @relation(fields: [productCategoryId], references: [id])
+  ProductCount      ProductCount[]
+  productCategoryId Int
+  ProductWaste      ProductWaste[]
+}
+
+model ProductCategory {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime
+  name      String
+  products  Product[]
+}
+
+model ProductCount {
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime
+  updatedAt      DateTime
+  product        Product       @relation(fields: [productId], references: [id])
+  amount         Int
+  productId      Int
+  StorageCount   StorageCount? @relation(fields: [storageCountId], references: [id])
+  storageCountId Int?
+}
+
+model StorageCount {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime
+  updatedAt    DateTime
+  productCouts ProductCount[]
+  date         DateTime
+}
+
+model ProductWaste {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id])
+  amount    Int
+  productId Int
+}
