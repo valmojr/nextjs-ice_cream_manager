@@ -1,7 +1,8 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Main Page</h1>
-    </main>
-  );
+  const authentication = cookies().get('token')?.value;
+
+  return authentication ? redirect('/main') : redirect('login');
 }
