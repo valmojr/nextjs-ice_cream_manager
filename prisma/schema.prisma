@@ -11,12 +11,14 @@ datasource db {
 }
 
 model User {
-  id         String       @id @default(cuid())
-  createdAt  DateTime
-  updatedAt  DateTime
-  email      String       @unique
-  name       String
-  Permission Permission[]
+  id          String       @id @default(cuid())
+  createdAt   DateTime
+  updatedAt   DateTime
+  email       String       @unique
+  username    String       @unique
+  password    String
+  displayname String?
+  Permission  Permission[]
 }
 
 model Permission {
