@@ -2,24 +2,23 @@ import { ModeToggle } from "@/components/mode-toggle";
 import AppLogo from "../../../public/svg/AppLogo";
 
 export default function UnloggedLayout({
-  children, // will be a page or nested layout
+  children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <section className="flex flex-row flex-nowrap h-screen w-full">
-      <div className="bg-secondary w-full flex flex-col flex-nowrap items-center justify-center">
+      <div className="bg-secondary lg:w-full flex flex-col flex-nowrap items-center justify-center w-0">
         <div className="text-end">
-          <h1 className="italic text-3xl">
+          <h1 className="italic lg:text-3xl text-[0px]">
             &quot;O Sucesso não aceita preguiça&quot;
           </h1>
-          <h1 className="italic text-xl mr-8">João Adibe</h1>
+          <h1 className="italic lg:text-xl text-[0px] mr-8">João Adibe</h1>
         </div>
       </div>
-      <div className="w-96 flex flex-col flex-nowrap items-center justify-start py-8">
-        <AppLogo />
+      <div className="lg:w-96 w-full flex flex-col flex-nowrap items-center justify-start lg:py-16 bg-secondary lg:pr-8">
         <div className="absolute top-2 right-2">
-          <ModeToggle />
+          <ModeToggle/>
         </div>
         {children}
       </div>
