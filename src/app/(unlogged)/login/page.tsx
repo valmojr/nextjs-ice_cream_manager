@@ -7,6 +7,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { z } from 'zod';
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from "next/link";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -64,6 +65,9 @@ export default function LoginForm() {
           </form>
         </Form>
       </CardContent>
+      <CardFooter>
+        <Link href={'/register'}>register</Link>
+      </CardFooter>
     </Card>
   )
 }

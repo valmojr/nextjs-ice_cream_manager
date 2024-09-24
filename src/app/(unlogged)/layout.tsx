@@ -16,7 +16,7 @@ export default function UnloggedLayout({
           <h1 className="italic lg:text-xl text-[0px] mr-8">João Adibe</h1>
         </div>
       </div>
-      <div className="lg:w-96 w-full flex flex-col flex-nowrap items-center justify-start lg:py-16 bg-secondary lg:pr-8">
+      <div className="lg:w-fit w-full flex flex-col flex-nowrap items-center justify-start lg:py-16 bg-secondary lg:pr-8">
         <div className="absolute top-2 right-2">
           <ModeToggle/>
         </div>
