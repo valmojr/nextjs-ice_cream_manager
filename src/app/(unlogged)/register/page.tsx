@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const registerFormSchema = z.object({
@@ -17,7 +18,7 @@ export default function RegisterPage() {
     confirmPassword: z.string(),
   }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirm"],
+    path: ["confirmPassword"],
   });
 
   const registerForm = useForm<z.infer<typeof registerFormSchema>>({
@@ -26,13 +27,15 @@ export default function RegisterPage() {
   });
 
   function onSubmitRegister(values: z.infer<typeof registerFormSchema>) {
-    console.log(values);
+    fetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify(values)
+    })
   };
 
   return <Card className="w-full lg:w-[400px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
     <CardHeader>
-      <CardTitle className="text-2xl font-bold">Login</CardTitle>
-      <CardDescription>Enter your username and password to access your account.</CardDescription>
+      <CardTitle className="text-2xl font-bold">Register</CardTitle>
     </CardHeader>
     <CardContent>
       <Form {...registerForm}>
@@ -57,7 +60,7 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>E-mail</FormLabel>
                 <FormControl>
-                  <Input placeholder="username" type="email" {...field} />
+                  <Input placeholder="your@email.com" type="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,7 +73,7 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>Display Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="displayname" {...field} />
+                  <Input placeholder="Display name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,7 +86,7 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="password" type={'password'} {...field} />
+                  <Input placeholder="Password" type={'password'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -103,6 +106,7 @@ export default function RegisterPage() {
             )}
           />
           <Button className="w-full">Register</Button>
+          <Link href={'/login'}><p className="">login</p></Link>
         </form>
       </Form>
     </CardContent>

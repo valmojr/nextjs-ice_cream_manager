@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -17,20 +19,34 @@ export default function LoginForm() {
 
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
-    defaultValues: {
-      username: 'username',
-    }
   });
 
+  const router = useRouter();
+
   function onSubmitLogin(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify(values),
+    }).then(async (response) => {
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login successful", data);
+        router.push('/dashboard')
+      } else {
+        const errorData = await response.json();
+        console.error("Login failed", errorData);
+        alert(errorData.error);
+      }
+    })
+      .catch((error) => {
+        console.error("Error during login", error);
+      });
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
+    <Card className="w-full lg:w-[400px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Login</CardTitle>
-        <CardDescription>Enter your username and password to access your account.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...loginForm}>
@@ -62,12 +78,10 @@ export default function LoginForm() {
               )}
             />
             <Button className="w-full">Log in</Button>
+            <Link href={'/register'}><p className="">Register</p></Link>
           </form>
         </Form>
       </CardContent>
-      <CardFooter>
-        <Link href={'/register'}>register</Link>
-      </CardFooter>
     </Card>
   )
 }

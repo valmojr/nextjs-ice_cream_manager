@@ -1,5 +1,4 @@
 import { ModeToggle } from "@/components/mode-toggle";
-import AppLogo from "../../../public/svg/AppLogo";
 
 export default function UnloggedLayout({
   children,
