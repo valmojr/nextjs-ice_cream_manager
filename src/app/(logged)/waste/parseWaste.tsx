@@ -109,7 +109,7 @@ export default function ParseWaste({
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={
-          cn("space-y-8 max-w-[480px] w-full px-8 py-8 items-center justify-center",
+          cn("space-y-8 max-w-[480px] w-full px-8 py-8 items-center justify-start",
             "flex flex-col flex-nowrap",
             "border-r"
           )
