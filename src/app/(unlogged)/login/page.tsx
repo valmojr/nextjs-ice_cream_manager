@@ -7,9 +7,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { z } from 'zod';
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from "next/link";
-import { cookies } from "next/headers";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -77,10 +76,10 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full">Log in</Button>
-            <Link href={'/register'}><p className="">Register</p></Link>
+            <Button className="w-full" variant={'default'}>Log in</Button>
           </form>
         </Form>
+        <Link href="/register" className="mt-8"><Button className="w-full" variant={'outline'}>Registrar</Button></Link>
       </CardContent>
     </Card>
   )
