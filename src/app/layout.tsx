@@ -22,7 +22,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "flex flex-row flex-wrap max-h-screen w-full",
+          "flex flex-row flex-wrap max-h-screen h-screen w-full",
           "justify-center items-start"
         )}
       >
