@@ -33,11 +33,11 @@ export default function RegisterPage() {
     })
   };
 
-  return <Card className="w-full lg:w-[400px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
+  return <Card className="bg-zinc-900 w-full lg:w-[350px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
     <CardHeader>
-      <CardTitle className="text-2xl font-bold">Register</CardTitle>
+      <CardTitle className="text-2xl font-bold">Registrar-se</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent className="flex flex-col flex-nowrap gap-4">
       <Form {...registerForm}>
         <form onSubmit={registerForm.handleSubmit(onSubmitRegister)} className="space-y-4">
           <FormField
@@ -71,9 +71,9 @@ export default function RegisterPage() {
             name="displayname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Display Name</FormLabel>
+                <FormLabel>Nome</FormLabel>
                 <FormControl>
-                  <Input placeholder="Display name" {...field} />
+                  <Input placeholder="Nome Sobrenome" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,9 +84,9 @@ export default function RegisterPage() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input placeholder="Password" type={'password'} {...field} />
+                  <Input placeholder="********" type={'password'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -97,18 +97,18 @@ export default function RegisterPage() {
             name='confirmPassword'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>Confirmar Senha</FormLabel>
                 <FormControl>
-                  <Input placeholder="Confirm password" type={'password'} {...field} />
+                  <Input placeholder="********" type={'password'} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button className="w-full">Register</Button>
-          <Link href={'/login'}><p className="">login</p></Link>
         </form>
       </Form>
+      <Link href={'/login'}><Button variant={'secondary'} className="w-full">Voltar</Button></Link>
     </CardContent>
   </Card>
 }
