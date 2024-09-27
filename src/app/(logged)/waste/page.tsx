@@ -12,9 +12,8 @@ export default async function WastePage() {
     }
   });
 
-  return <div className={cn("flex flex-row flex-nowrap w-full h-full")}>
+  return <>
       <ParseWaste products={products}/>
-      <Separator orientation="vertical"/>
       <WasteChart/>
-    </div>
+    </>
 }
