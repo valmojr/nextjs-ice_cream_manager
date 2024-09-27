@@ -1,4 +1,4 @@
-import { getUserFromToken } from "@/lib/utils";
+import { cn, getUserFromToken } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { cookies } from "next/headers";
 import LoggedLayoutTopMenu from "./topmenu";
@@ -20,7 +20,14 @@ export default function loggedLayout({
   return (
     <>
       <LoggedLayoutTopMenu user={user} />
-      {children}
+      <div className={cn(
+          "flex lg:flex-row flex-col flex-nowrap",
+          "py-4 pt-16 px-4",
+          "items-start justify-center",
+          "w-full h-full"
+        )}>
+        {children}
+      </div>
     </>
   );
 }
