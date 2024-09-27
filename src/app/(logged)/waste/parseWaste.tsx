@@ -109,12 +109,15 @@ export default function ParseWaste({
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={
-          cn("space-y-8 max-w-[480px] w-full px-8 py-8 items-center justify-start",
+          cn(
             "flex flex-col flex-nowrap",
-            "border-r"
+            "items-center justify-start",
+            "space-y-8 px-8 py-8",
+            "lg:max-w-[500px] w-full",
+            "lg:max-h-full"
           )
         }>
-          <FormLabel className="text-3xl">Controle de Desperdícios</FormLabel>
+          <FormLabel className="lg:text-3xl text-2xl">Controle de Desperdícios</FormLabel>
           <FormField
             control={form.control}
             name="weight"
