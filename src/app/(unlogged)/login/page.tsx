@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -43,11 +44,11 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="w-full lg:w-[400px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
+    <Card className="bg-zinc-900 w-full lg:w-[350px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Login</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className={cn("flex flex-col flex-nowrap gap-4")}>
         <Form {...loginForm}>
           <form onSubmit={loginForm.handleSubmit(onSubmitLogin)} className="space-y-4">
             <FormField
@@ -76,10 +77,12 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" variant={'default'}>Log in</Button>
+            <Button className="w-full" variant={'default'}>Login</Button>
           </form>
         </Form>
-        <Link href="/register" className="mt-8"><Button className="w-full" variant={'outline'}>Registrar</Button></Link>
+        <Link href="/register">
+          <Button className="w-full" variant={'outline'}>Registrar</Button>
+        </Link>
       </CardContent>
     </Card>
   )
