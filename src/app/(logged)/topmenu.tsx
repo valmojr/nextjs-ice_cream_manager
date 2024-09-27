@@ -39,20 +39,21 @@ export default function LoggedLayoutTopMenu({ user }: { user: User }) {
   }
 
   return (
-    <Card className={cn("flex flex-row flex-nowrap w-full h-fit rounded-none px-2 py-2 gap-2 justify-between items-center")}>
+    <Card className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none px-2 py-2 gap-2 justify-between items-center")}>
       <div className="flex flex-row flex-nowrap items-center w-full h-full gap-3">
-        <Link href={"/main"}><div className="w-8 h-8 bg-foreground rounded-full" /></Link>
+        <Link href={"/main"}><div className="w-8 h-8 bg-foreground rounded-lg" /></Link>
         {
           navItems.map(item => {
             return <div key={item.label} className={cn(
               "flex flex-row flex-nowrap w-fit py-2 px-2 rounded-md gap-2",
               "cursor-pointer",
+              "items-center justify-center",
               pathname === item.href ?
                 "bg-primary text-primary-foreground hover:bg-primary/90" :
                 "hover:bg-accent hover:text-accent-foreground"
             )}>
               <item.icon />
-              <Link href={item.href}>{item.label}</Link>
+              <Link href={item.href} className="lg:text-lg text-[0px]">{item.label}</Link>
             </div>
           })
         }
