@@ -1,3 +1,6 @@
+import { getAllProductCategories } from "@/app/api/category/functions";
+import { getAllWastes } from "@/app/api/waste/functions";
+import { ProductWaste as Waste } from '@prisma/client';
 import {
   Table,
   TableBody,
@@ -8,80 +11,91 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { getAllProducts } from "@/app/api/product/functions";
  
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-]
- 
-export default function WasteChart() {
+export default async function WasteChart() {
+  const categories = await getAllProductCategories();
+  const products = await getAllProducts();
+  const wastesInDatabase = await getAllWastes();
+
+  const joinByDatesAndProductIds = (data: Waste[]): Waste[] => {
+    const joinedData: Waste[] = [];
+    for (const item of data) {
+      const found = joinedData.find(
+        (joinedItem) =>
+          joinedItem.date.getTime() == item.date.getTime() &&
+          joinedItem.productId === item.productId
+      );
+      if (found) {
+        found.amount += item.amount;
+      } else {
+        joinedData.push({ ...item });
+      }
+    }
+    return joinedData;
+  };
+
+  const filteredWastes = joinByDatesAndProductIds(wastesInDatabase);
+
+  function formatDate(date: Date): string {
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${day}/${month}`;
+  }
+
+  function transformData(data: Waste[]): any[] {
+    const result: any[] = [];
+
+    for (const item of data) {
+      const { date, productId, amount } = item;
+
+      let dateObject: any;
+      dateObject = result.find((obj) => obj.date.getTime() === date.getTime());
+      if (!dateObject) {
+        dateObject = { date };
+        result.push(dateObject);
+      }
+
+      dateObject[productId] = amount;
+    }
+
+    return result;
+  }
+
+  const tableData = transformData(filteredWastes);
+
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Data</TableHead>
+            {products.map((product) => {
+              const category = categories.filter(
+                (category) => category.id === product.productCategoryId
+              )[0];
+              return (
+                <TableHead
+                  key={product.id || ""}
+                >{`${product.name}`}</TableHead>
+              );
+            })}
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {tableData.map((waste) => {
+            return (
+              <TableRow key={waste.date.getTime()}>
+                <TableCell>{formatDate(waste.date)}</TableCell>
+                {products.map((product) => {
+                  return (
+                    <TableCell key={product.id}>{waste[product.id]}</TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
   )
 }
