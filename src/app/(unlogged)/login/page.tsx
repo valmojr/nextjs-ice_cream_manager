@@ -23,7 +23,7 @@ export default function LoginForm() {
   });
 
   const router = useRouter();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   function onSubmitLogin(values: z.infer<typeof loginFormSchema>) {
     fetch('/api/login', {
@@ -32,10 +32,22 @@ export default function LoginForm() {
     }).then(async (response) => {
       if (response.ok) {
         const data = await response.json();
-        toast({
-          description: "Logado com sucesso",
-        });
-        router.push('/dashboard')
+
+        if (data.status === 200) {
+          toast({
+            description: "Logado com Sucesso",
+          });
+
+          router.push('/dashboard');
+        } else if (data.status === 401) {
+          toast({
+            description: "Usuário ou senha inválido",
+          })
+        } else {
+          toast({
+            description: "Algo deu errado",
+          })
+        }
       } else {
         const errorData = await response.json();
         toast({
