@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,12 +32,14 @@ export default function RegisterPage() {
   });
 
   async function onSubmitRegister(values: z.infer<typeof registerFormSchema>) {
-    console.log(values);
     const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify(values)
     });
-    if (response.ok) {
+
+    const data = await response.json();
+
+    if (data) {
       toast({
         description: "Registrado com sucesso",
       });
