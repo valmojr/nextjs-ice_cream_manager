@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         message: "Login successful",
       });
 
-      response.headers.set("Set-Cookie", cookie); // Attach the cookie to the response
+      response.headers.set("Set-Cookie", cookie);
 
       return response;
     } else {
