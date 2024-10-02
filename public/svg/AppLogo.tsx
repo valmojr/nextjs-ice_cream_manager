@@ -1,5 +1,6 @@
-export default function AppLogo() {
-  return <div className="w-24 h-[400px] bg-red-500">
-    <h1>Logo</h1>
-  </div>
+import { IceCreamBowl, LucideProps } from "lucide-react";
+import { ComponentProps } from "react";
+
+export default function AppLogo(props: ComponentProps<"svg"> & LucideProps) {
+  return <IceCreamBowl {...props}/>
 }

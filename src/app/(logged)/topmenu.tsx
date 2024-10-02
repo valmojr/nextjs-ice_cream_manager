@@ -15,6 +15,7 @@ import { User } from "@prisma/client";
 import { Coins, LayoutDashboard, LogOut, Package2, Trash2, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import AppLogo from "../../../public/svg/AppLogo";
 
 export default function LoggedLayoutTopMenu({ user }: { user: User }) {
   const pathname = usePathname();
@@ -36,11 +37,15 @@ export default function LoggedLayoutTopMenu({ user }: { user: User }) {
   return (
     <Card className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none px-2 py-2 gap-2 justify-between items-center")}>
       <div className="flex flex-row flex-nowrap items-center w-full h-full gap-3">
-        <Link href={"/main"}><div className="w-8 h-8 bg-foreground rounded-lg" /></Link>
+        <Link href={"/main"}>
+          <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg","bg-primary p-2")}>
+            <AppLogo size={28} className="stroke-background" />
+          </div>
+        </Link>
         {
           navItems.map(item => {
             return <div key={item.label} className={cn(
-              "flex flex-row flex-nowrap w-fit py-2 px-2 rounded-md gap-2",
+              "flex flex-row flex-nowrap w-fit p-2 rounded-md gap-2",
               "cursor-pointer",
               "items-center justify-center",
               pathname === item.href ?

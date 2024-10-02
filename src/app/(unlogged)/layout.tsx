@@ -1,7 +1,8 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
 import { cookies } from "next/headers";
-import { redirect  } from "next/navigation";
+import { redirect } from "next/navigation";
+import AppLogo from "../../../public/svg/AppLogo";
 
 export default function UnloggedLayout({
   children,
@@ -31,6 +32,14 @@ export default function UnloggedLayout({
         "lg:max-w-[400px] w-full py-8 px-4")}>
         <div className="absolute top-2 right-2">
           <ModeToggle />
+        </div>
+        <div className={cn("h-full mt-4")}>
+          <div className={cn("flex flex-row flex-nowrap items-center justify-center",
+            "w-fit h-fit",
+            "bg-primary p-10 rounded-full",
+          )}>
+            <AppLogo className="stroke-background" size={80} />
+          </div>
         </div>
         {children}
       </div>
