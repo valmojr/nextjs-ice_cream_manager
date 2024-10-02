@@ -1,3 +1,9 @@
+import ProductList from "./ProductList"
+import StorageCount from "./StorageCount"
+
 export default function StorageHistoryPage() {
-  return <h1>Storage Page</h1>
+  return <>
+    <ProductList/>
+    <StorageCount/>
+  </>
 }
