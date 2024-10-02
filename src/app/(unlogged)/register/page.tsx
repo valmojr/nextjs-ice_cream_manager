@@ -8,8 +8,14 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const registerFormSchema = z.object({
     username: z.string().min(6).max(40),
     email: z.string().email(),
@@ -26,20 +32,33 @@ export default function RegisterPage() {
     defaultValues: {},
   });
 
-  function onSubmitRegister(values: z.infer<typeof registerFormSchema>) {
-    fetch('/api/register', {
+  async function onSubmitRegister(values: z.infer<typeof registerFormSchema>) {
+    console.log(values);
+    const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify(values)
-    })
+    });
+    if (response.ok) {
+      toast({
+        description: "Registrado com sucesso",
+      });
+      router.push('/login')
+    } else {
+      const errorData = await response.json();
+      toast({
+        description: "Falha ao registrar",
+      })
+      alert(errorData.error);
+    }
   };
 
-  return <Card className="bg-zinc-900 w-full lg:w-[350px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
-    <CardHeader>
-      <CardTitle className="text-2xl font-bold">Registrar-se</CardTitle>
-    </CardHeader>
-    <CardContent className="flex flex-col flex-nowrap gap-4">
+  return <>
       <Form {...registerForm}>
-        <form onSubmit={registerForm.handleSubmit(onSubmitRegister)} className="space-y-4">
+        <form onSubmit={registerForm.handleSubmit(onSubmitRegister)} className={cn(
+          "flex flex-col flex-nowrap",
+          "w-full h-fit",
+          "space-y-4"
+          )}>
           <FormField
             control={registerForm.control}
             name="username"
@@ -105,10 +124,9 @@ export default function RegisterPage() {
               </FormItem>
             )}
           />
-          <Button className="w-full">Register</Button>
-        </form>
+          <Button className="w-full" type="submit">Registrar-se</Button>
+          <Link href={'/login'}><Button variant={'secondary'} className="w-full">Voltar</Button></Link>
+          </form>
       </Form>
-      <Link href={'/login'}><Button variant={'secondary'} className="w-full">Voltar</Button></Link>
-    </CardContent>
-  </Card>
+    </>
 }

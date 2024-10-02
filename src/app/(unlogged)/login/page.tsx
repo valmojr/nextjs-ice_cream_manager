@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -22,6 +23,7 @@ export default function LoginForm() {
   });
 
   const router = useRouter();
+  const {toast} = useToast();
 
   function onSubmitLogin(values: z.infer<typeof loginFormSchema>) {
     fetch('/api/login', {
@@ -30,11 +32,15 @@ export default function LoginForm() {
     }).then(async (response) => {
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful", data);
+        toast({
+          description: "Logado com sucesso",
+        });
         router.push('/dashboard')
       } else {
         const errorData = await response.json();
-        console.error("Login failed", errorData);
+        toast({
+          description: errorData.error,
+        })
         alert(errorData.error);
       }
     })
@@ -44,46 +50,41 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="bg-zinc-900 w-full lg:w-[350px] mx-auto lg:h-fit h-full flex flex-col flex-nowrap justify-start">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">Login</CardTitle>
-      </CardHeader>
-      <CardContent className={cn("flex flex-col flex-nowrap gap-4")}>
-        <Form {...loginForm}>
-          <form onSubmit={loginForm.handleSubmit(onSubmitLogin)} className="space-y-4">
-            <FormField
-              control={loginForm.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="username" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={loginForm.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="password" type={'password'} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button className="w-full" variant={'default'}>Login</Button>
-          </form>
-        </Form>
-        <Link href="/register">
-          <Button className="w-full" variant={'outline'}>Registrar</Button>
-        </Link>
-      </CardContent>
-    </Card>
+    <>
+      <Form {...loginForm}>
+        <form onSubmit={loginForm.handleSubmit(onSubmitLogin)} className={cn(
+          "flex flex-col flex-nowrap",
+          "w-full space-y-4")}>
+          <FormField
+            control={loginForm.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="username" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={loginForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="password" type={'password'} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button className="w-full" variant={'default'} type="submit">Login</Button>
+          <Link className="w-full" href={"/register"}><Button className="w-full" variant={'secondary'} type="submit">Registrar-se</Button></Link>
+        </form>
+      </Form>
+    </>
   )
 }
