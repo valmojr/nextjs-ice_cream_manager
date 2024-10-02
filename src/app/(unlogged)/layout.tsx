@@ -1,12 +1,19 @@
 import { ModeToggle } from "@/components/mode-toggle";
-import AppLogo from "../../../public/svg/AppLogo";
 import { cn } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { redirect  } from "next/navigation";
 
 export default function UnloggedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const authToken = cookies().get('authToken')?.value;
+
+  if (authToken) {
+    redirect('/dashboard');
+  }
+
   return (
     <section className="flex flex-row flex-nowrap h-full w-full">
       <div className="lg:w-full flex flex-col flex-nowrap items-center justify-center w-0 bg-secondary">
