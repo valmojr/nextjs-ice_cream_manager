@@ -28,7 +28,7 @@ export function parseAvatarFallbackName(user: User) {
 export function functionTranslator(functionEnum: $Enums.Functions) {
   switch (functionEnum) {
     case $Enums.Functions.Owner:
-      return "Dono";
+      return "Proprietário";
     case $Enums.Functions.Manager:
       return "Gerente";
     case $Enums.Functions.Comissioner:
