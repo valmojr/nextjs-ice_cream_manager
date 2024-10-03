@@ -10,14 +10,14 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { cn, parseAvatarFallbackName } from "@/lib/utils";
-import { User } from "@prisma/client";
+import { cn, functionTranslator, parseAvatarFallbackName } from "@/lib/utils";
+import { $Enums, User } from "@prisma/client";
 import { Coins, LayoutDashboard, LogOut, Package2, Trash2, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import AppLogo from "../../../public/svg/AppLogo";
 
-export default function LoggedLayoutTopMenu({ user }: { user: User }) {
+export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { storeName: string, function: $Enums.Functions }[] } }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -38,23 +38,25 @@ export default function LoggedLayoutTopMenu({ user }: { user: User }) {
     <Card className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none px-2 py-2 gap-2 justify-between items-center")}>
       <div className="flex flex-row flex-nowrap items-center w-full h-full gap-3">
         <Link href={"/main"}>
-          <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg","bg-primary p-2")}>
+          <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg", "bg-primary p-2")}>
             <AppLogo size={28} className="stroke-background" />
           </div>
         </Link>
         {
           navItems.map(item => {
-            return <div key={item.label} className={cn(
-              "flex flex-row flex-nowrap w-fit p-2 rounded-md gap-2",
-              "cursor-pointer",
-              "items-center justify-center",
-              pathname === item.href ?
-                "bg-primary text-primary-foreground hover:bg-primary/90" :
-                "hover:bg-accent hover:text-accent-foreground"
-            )}>
-              <item.icon />
-              <Link href={item.href} className="lg:text-lg text-[0px]">{item.label}</Link>
-            </div>
+            return <Link href={item.href} key={item.label}>
+              <div className={cn(
+                "flex flex-row flex-nowrap w-fit p-2 rounded-md gap-2",
+                "cursor-pointer",
+                "items-center justify-center",
+                pathname === item.href ?
+                  "bg-primary text-primary-foreground hover:bg-primary/90" :
+                  "hover:bg-accent hover:text-accent-foreground"
+              )}>
+                <item.icon />
+                <h1 className="lg:text-lg text-[0px]">{item.label}</h1>
+              </div>
+            </Link>
           })
         }
       </div>
@@ -73,7 +75,9 @@ export default function LoggedLayoutTopMenu({ user }: { user: User }) {
                 <AvatarFallback className="text-5xl">{parseAvatarFallbackName(user)}</AvatarFallback>
               </Avatar>
               <h1 className="text-3xl">{user.displayname}</h1>
-              <h2 className="text-md">{user.username}</h2>
+              {user.roles.map(role => {
+                return <h2 key={role.storeName} className="text-md">{functionTranslator(role.function)} | {role.storeName}</h2>
+              })}
             </div>
             <SheetFooter className="flex flex-col sm:flex-col">
               <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => onLogout()}>
