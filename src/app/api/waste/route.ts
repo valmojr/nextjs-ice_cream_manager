@@ -10,10 +10,6 @@ import {
 export async function GET(request: Request) {
   const data = await request.json();
 
-  if (!data.waste) {
-    return NextResponse.json({ error: "Bad Request", status: 401 });
-  }
-
   const { waste } = data;
 
   if (waste) {
