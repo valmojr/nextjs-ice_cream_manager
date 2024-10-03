@@ -10,7 +10,7 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils";
+import { cn, parseAvatarFallbackName } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { Coins, LayoutDashboard, LogOut, Package2, Trash2, Users } from "lucide-react";
 import Link from "next/link";
@@ -63,19 +63,19 @@ export default function LoggedLayoutTopMenu({ user }: { user: User }) {
         <Sheet>
           <SheetTrigger asChild>
             <Avatar className="cursor-pointer">
-              <AvatarFallback>{user.username[0].toUpperCase()}</AvatarFallback>
+              <AvatarFallback>{parseAvatarFallbackName(user)}</AvatarFallback>
             </Avatar>
           </SheetTrigger>
           <SheetContent>
-            <div className="flex flex-col items-center py-4">
+            <div className="flex flex-col items-center py-4 gap-4">
               <Avatar className="h-36 w-36">
                 <AvatarImage src="/placeholder.svg?height=96&width=96" alt="@johndoe" />
-                <AvatarFallback className="text-5xl">{user.username[0].toUpperCase()}</AvatarFallback>
+                <AvatarFallback className="text-5xl">{parseAvatarFallbackName(user)}</AvatarFallback>
               </Avatar>
               <h1 className="text-3xl">{user.displayname}</h1>
               <h2 className="text-md">{user.username}</h2>
             </div>
-            <SheetFooter className="flex flex-col gap-4 sm:flex-col">
+            <SheetFooter className="flex flex-col sm:flex-col">
               <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => onLogout()}>
                 <LogOut className="h-4 w-4" />
                 Logout

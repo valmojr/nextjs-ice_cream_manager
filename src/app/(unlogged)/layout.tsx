@@ -33,7 +33,7 @@ export default function UnloggedLayout({
         <div className="absolute top-2 right-2">
           <ModeToggle />
         </div>
-        <div className={cn("h-full mt-4")}>
+        <div className={cn("flex flex-row flex-nowrap h-full my-auto items-center justify-center")}>
           <div className={cn("flex flex-row flex-nowrap items-center justify-center",
             "w-fit h-fit",
             "bg-primary p-10 rounded-full",
