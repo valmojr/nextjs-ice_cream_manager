@@ -43,7 +43,7 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
           </div>
         </Link>
         {
-          navItems.map(item => {
+          user.roles.length > 0 ? navItems.map(item => {
             return <Link href={item.href} key={item.label}>
               <div className={cn(
                 "flex flex-row flex-nowrap w-fit p-2 rounded-md gap-2",
@@ -57,7 +57,13 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
                 <h1 className="lg:text-lg text-[0px]">{item.label}</h1>
               </div>
             </Link>
-          })
+          }) :
+          <div className={cn("flex flex-row flex-nowrap","items-center justify-center","bg-red-500 w-full h-10 rounded-lg")}>
+            <h1 className="text-xl text-white">
+              Usuário não autorizado
+            </h1>
+            <h1 className="lg:text-xl text-[0px] text-white">{", contate um administrador"}</h1>
+          </div>
         }
       </div>
       <div className="flex flex-row flex-nowrap items-center gap-3">
@@ -75,12 +81,12 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
                 <AvatarFallback className="text-5xl">{parseAvatarFallbackName(user)}</AvatarFallback>
               </Avatar>
               <h1 className="text-3xl">{user.displayname}</h1>
-              {user.roles.length === 0 ? <h2 className="text-md">Não autorizado em nenhuma loja</h2> :
-                user.roles.map(role => {
-                  return <h2 key={role.storeName} className="text-md">{functionTranslator(role.function)} | {role.storeName}</h2>
-                })
+              {
+                user.roles.length === 0 ? <h2 className="text-md">Não autorizado em nenhuma loja</h2> :
+                  user.roles.map(role => {
+                    return <h2 key={role.storeName} className="text-md">{functionTranslator(role.function)} | {role.storeName}</h2>
+                  })
               }
-
             </div>
             <SheetFooter className="flex flex-col sm:flex-col">
               <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => onLogout()}>
