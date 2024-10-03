@@ -19,11 +19,32 @@ export async function POST(request: Request) {
       usernameOnDatabase.password
     );
 
-    const { password, ...data } = usernameOnDatabase
+    const stores = (
+      await prisma.role.findMany({
+        where: {
+          userId: usernameOnDatabase.id,
+        },
+      })
+    ).map(async (role) => {
+      const store = await prisma.store.findUnique({
+        where: {
+          id: role.storeId as string,
+        },
+      });
+
+      return {
+        storeName: store?.name as string,
+        function: role.function,
+      };
+    });
+
+    const roles = await Promise.all(stores);
+
+    const { password, ...data } = usernameOnDatabase;
 
     if (verification) {
-      const token = jwt.sign(data, process.env.JWT_SECRET || "", {
-        expiresIn: "7d",
+      const token = jwt.sign({ ...data, roles }, process.env.JWT_SECRET || "", {
+        expiresIn: "1d",
       });
 
       const cookie = serialize("authToken", token, {
