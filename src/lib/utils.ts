@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { $Enums, User } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import jwt from "jsonwebtoken";
 import { twMerge } from "tailwind-merge";
@@ -22,5 +22,18 @@ export function parseAvatarFallbackName(user: User) {
     }
   } else {
     return user.username[0].toUpperCase();
+  }
+}
+
+export function functionTranslator(functionEnum: $Enums.Functions) {
+  switch (functionEnum) {
+    case $Enums.Functions.Owner:
+      return "Dono";
+    case $Enums.Functions.Manager:
+      return "Gerente";
+    case $Enums.Functions.Comissioner:
+      return "Encarregado";
+    case $Enums.Functions.Employee:
+      return "Funcionário";
   }
 }
