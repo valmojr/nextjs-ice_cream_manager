@@ -30,10 +30,12 @@ export function parseAvatarFallbackName(user: User) {
   }
 }
 
-type Função = "Proprietário" | "Gerente" | "Encarregado" | "Funcionário";
+type Função = "Administrador" | "Proprietário" | "Gerente" | "Encarregado" | "Funcionário";
 
 export function functionTranslator(functionEnum: $Enums.Functions): Função {
   switch (functionEnum) {
+    case $Enums.Functions.Administrator:
+      return "Administrador";
     case $Enums.Functions.Owner:
       return "Proprietário";
     case $Enums.Functions.Manager:
