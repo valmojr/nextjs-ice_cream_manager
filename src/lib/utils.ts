@@ -16,16 +16,23 @@ export function getUserFromToken(token: string) {
 export function parseAvatarFallbackName(user: User) {
   if (user.displayname) {
     if (user.displayname.split(" ").length > 1) {
-      return user.displayname.split(" ")[0][0] + user.displayname.split(" ")[1][0];
+      return (
+        user.displayname.split(" ")[0][0] + user.displayname.split(" ")[1][0]
+      );
     } else {
-      return user.displayname[0].toUpperCase() + user.displayname[user.displayname.length - 1].toUpperCase();
+      return (
+        user.displayname[0].toUpperCase() +
+        user.displayname[user.displayname.length - 1].toUpperCase()
+      );
     }
   } else {
     return user.username[0].toUpperCase();
   }
 }
 
-export function functionTranslator(functionEnum: $Enums.Functions) {
+type Função = "Proprietário" | "Gerente" | "Encarregado" | "Funcionário";
+
+export function functionTranslator(functionEnum: $Enums.Functions): Função {
   switch (functionEnum) {
     case $Enums.Functions.Owner:
       return "Proprietário";
@@ -36,4 +43,20 @@ export function functionTranslator(functionEnum: $Enums.Functions) {
     case $Enums.Functions.Employee:
       return "Funcionário";
   }
+}
+
+export function getHighestRole({
+  roles,
+}: User & { roles: { storeName: string; function: $Enums.Functions }[] }): Função {
+  const func = roles.sort((a, b) => {
+    if (a.function > b.function) {
+      return -1;
+    }
+    if (a.function < b.function) {
+      return 1;
+    }
+    return 0;
+  })[0].function;
+
+  return functionTranslator(func);
 }
