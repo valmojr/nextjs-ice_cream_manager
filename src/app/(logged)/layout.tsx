@@ -1,5 +1,5 @@
 import { cn, getUserFromToken } from "@/lib/utils";
-import { User } from "@prisma/client";
+import { $Enums, User } from "@prisma/client";
 import { cookies } from "next/headers";
 import LoggedLayoutTopMenu from "./topmenu";
 import { redirect } from "next/navigation";
@@ -15,7 +15,7 @@ export default function loggedLayout({
     redirect('/login');
   }
 
-  const user = getUserFromToken(token) as User;
+  const user = getUserFromToken(token) as User & { roles: { storeName: string, function: $Enums.Functions }[] };
 
   return (
     <>
@@ -23,7 +23,7 @@ export default function loggedLayout({
       <div className={cn(
           "flex lg:flex-row flex-col flex-nowrap",
           "py-4 pt-16 px-4",
-          "items-start justify-center",
+          "items-center justify-center",
           "w-full h-full"
         )}>
         {children}
