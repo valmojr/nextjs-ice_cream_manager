@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown, ClipboardPenLine } from "lucide-react";
+import { Check, ChevronsUpDown, ClipboardPenLine, Scale } from "lucide-react";
 import { useForm, useFormState } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
@@ -35,10 +35,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ProductWaste as Waste } from "@prisma/client";
+import { User, ProductWaste as Waste } from "@prisma/client";
 
 const FormSchema = z.object({
-  weight: z
+  amount: z
     .number({
       invalid_type_error: "Apenas numeros",
       required_error: "Preciso do valor do peso",
@@ -50,16 +50,17 @@ const FormSchema = z.object({
   }),
   plate: z.boolean().default(true),
   productId: z
-    .string({
+    .number({
       required_error: "Selecione o produto",
     })
-    .uuid(),
 });
 
-export function WasteForm({
+export default function WasteForm({
   products,
+  user,
 }: {
-  products: { label: string; value: string }[];
+  products: { label: string; value: number }[];
+  user: User;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -75,17 +76,18 @@ export function WasteForm({
   async function onSubmit({ plate, ...data }: z.infer<typeof FormSchema>) {
     const dataWaste = {
       ...data,
-      weight: plate ? data.weight - 159 : data.weight,
+      amount: plate ? data.amount - 159 : data.amount,
+      userId: user.id,
     };
 
-    const response = await fetch("http://localhost:3000/api/waste", {
+    const response = await fetch("/api/waste", {
       method: "POST",
       body: JSON.stringify({ waste: dataWaste }),
     });
 
     const { waste } = (await response.json()) as { waste: Waste };
 
-    const product = products.find((item) => item.value === waste.productId.toString());
+    const product = products.find((item) => item.value === waste.productId);
     toast({
       title: "Desperdício Anotado",
       description: `${product?.label} - ${waste.amount}g`,
@@ -93,7 +95,7 @@ export function WasteForm({
         <ToastAction
           altText="Try again"
           onClick={() =>
-            fetch("http://localhost:3000/api/waste", {
+            fetch("/api/waste", {
               method: "DELETE",
               body: JSON.stringify({ waste }),
             })
@@ -108,12 +110,21 @@ export function WasteForm({
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className={
+          cn(
+            "flex flex-col flex-nowrap",
+            "items-center justify-start",
+            "space-y-8 px-8 py-8",
+            "lg:max-w-[500px] w-full",
+            "lg:max-h-full",
+          )
+        }>
+          <FormLabel className="lg:text-3xl text-2xl">Registrar Desperdícios</FormLabel>
           <FormField
             control={form.control}
-            name="weight"
+            name="amount"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Peso (g)</FormLabel>
                 <FormControl>
                   <Input
@@ -122,7 +133,7 @@ export function WasteForm({
                     onChange={(event) => field.onChange(+event.target.value)}
                   />
                 </FormControl>
-                <FormDescription className="text-[0px] lg:text-sm">
+                <FormDescription className="text-[0px] lg:text-sm w-full">
                   Peso em gramas medidos
                 </FormDescription>
                 <FormMessage />
@@ -133,7 +144,7 @@ export function WasteForm({
             control={form.control}
             name={"plate"}
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 w-full">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -148,7 +159,7 @@ export function WasteForm({
             control={form.control}
             name="productId"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex flex-col w-full">
                 <FormLabel>Produto</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -163,8 +174,8 @@ export function WasteForm({
                       >
                         {field.value
                           ? products.find(
-                              (product) => product.value === field.value
-                            )?.label
+                            (product) => product.value === field.value
+                          )?.label
                           : "Selecionar Produto"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
@@ -208,7 +219,7 @@ export function WasteForm({
             control={form.control}
             name="date"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex flex-col w-full">
                 <FormLabel>Data</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
