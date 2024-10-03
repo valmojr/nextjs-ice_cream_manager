@@ -10,24 +10,52 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { cn, functionTranslator, parseAvatarFallbackName } from "@/lib/utils";
+import { cn, parseAvatarFallbackName } from "@/lib/utils";
 import { $Enums, User } from "@prisma/client";
-import { Coins, LayoutDashboard, LogOut, Package2, Trash2, Users } from "lucide-react";
+import { Coins, LayoutDashboard, LogOut, Package2, Settings, Trash2, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import AppLogo from "../../../public/svg/AppLogo";
+import { functionTranslator, getHighestRole } from "@/lib/authorization";
 
 export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { storeName: string, function: $Enums.Functions }[] } }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const navItems = [
+    { href: "/admin", icon: Settings, label: "Administração" },
     { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/financial", icon: Coins, label: "Financeiro" },
+    { href: "/roster", icon: Users, label: "Pessoal" },
     { href: "/waste", icon: Trash2, label: "Desperdício" },
     { href: "/storage", icon: Package2, label: "Estoque" },
-    { href: "/roster", icon: Users, label: "Pessoal" },
   ];
+
+  const highestRole = getHighestRole(user);
+
+  switch (highestRole) {
+    case "Funcionário":
+      navItems.shift();
+      navItems.shift();
+      navItems.shift();
+      navItems.shift();
+      break;
+    case "Encarregado":
+      navItems.shift();
+      navItems.shift();
+      navItems.shift();
+      break;
+    case "Gerente":
+      navItems.shift();
+      navItems.shift();
+      navItems.shift();
+      break;
+    case "Proprietário":
+      navItems.shift();
+      break;
+    case "Administrador":
+      break;
+  }
 
   function onLogout() {
     fetch("/api/logout");
@@ -89,7 +117,7 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
               }
             </div>
             <SheetFooter className="flex flex-col sm:flex-col">
-              <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => onLogout()}>
+              <Button className="w-full flex items-center gap-2" onClick={() => onLogout()}>
                 <LogOut className="h-4 w-4" />
                 Logout
               </Button>
