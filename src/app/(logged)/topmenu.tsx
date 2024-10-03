@@ -75,9 +75,12 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
                 <AvatarFallback className="text-5xl">{parseAvatarFallbackName(user)}</AvatarFallback>
               </Avatar>
               <h1 className="text-3xl">{user.displayname}</h1>
-              {user.roles.map(role => {
-                return <h2 key={role.storeName} className="text-md">{functionTranslator(role.function)} | {role.storeName}</h2>
-              })}
+              {user.roles.length === 0 ? <h2 className="text-md">Não autorizado em nenhuma loja</h2> :
+                user.roles.map(role => {
+                  return <h2 key={role.storeName} className="text-md">{functionTranslator(role.function)} | {role.storeName}</h2>
+                })
+              }
+
             </div>
             <SheetFooter className="flex flex-col sm:flex-col">
               <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => onLogout()}>
