@@ -37,13 +37,14 @@ enum Functions {
 }
 
 model Role {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  permission Functions
-  user       User[]
-  store      Store?    @relation(fields: [storeId], references: [id])
-  storeId    String?
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  function  Functions
+  user      User      @relation(fields: [userId], references: [id])
+  store     Store?    @relation(fields: [storeId], references: [id])
+  storeId   String?
+  userId    String
 }
 
 model Product {
