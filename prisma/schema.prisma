@@ -20,11 +20,13 @@ model User {
 }
 
 model Store {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  roles     Role[]
+  id           String         @id @default(cuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  name         String
+  roles        Role[]
+  ProductWaste ProductWaste[]
+  StorageCount StorageCount[]
 }
 
 model Permission {
@@ -83,6 +85,8 @@ model StorageCount {
   updatedAt    DateTime       @updatedAt
   productCouts ProductCount[]
   date         DateTime
+  store        Store          @relation(fields: [storeId], references: [id])
+  storeId      String
 }
 
 model ProductWaste {
@@ -95,4 +99,6 @@ model ProductWaste {
   productId Int
   provider  User     @relation(fields: [userId], references: [id])
   userId    String
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String
 }
