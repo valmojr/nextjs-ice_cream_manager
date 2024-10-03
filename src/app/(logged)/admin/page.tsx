@@ -1,15 +1,20 @@
+import { isAdmin } from "@/lib/authorization";
 import { getUserFromToken } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { RoledUser as User } from "@/lib/types";
-import { isOwner } from "@/lib/authorization";
 import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default function AdminPage() {
   const user = getUserFromToken(cookies().get('authToken')?.value as string) as User;
 
-  if (!isOwner(user)) {
+  if (!isAdmin(user)) {
     redirect('/unauthorized');
   }
 
-  return <h1>Dashboard page</h1>
-}
+  return (
+    <div>
+      <h1>Welcome to the Admin Dashboard</h1>
+      <p>Only authorized users can see this page.</p>
+    </div>
+  );
+};
