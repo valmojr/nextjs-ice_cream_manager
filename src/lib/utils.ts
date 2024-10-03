@@ -29,36 +29,3 @@ export function parseAvatarFallbackName(user: User) {
     return user.username[0].toUpperCase();
   }
 }
-
-type Função = "Administrador" | "Proprietário" | "Gerente" | "Encarregado" | "Funcionário";
-
-export function functionTranslator(functionEnum: $Enums.Functions): Função {
-  switch (functionEnum) {
-    case $Enums.Functions.Administrator:
-      return "Administrador";
-    case $Enums.Functions.Owner:
-      return "Proprietário";
-    case $Enums.Functions.Manager:
-      return "Gerente";
-    case $Enums.Functions.Comissioner:
-      return "Encarregado";
-    case $Enums.Functions.Employee:
-      return "Funcionário";
-  }
-}
-
-export function getHighestRole({
-  roles,
-}: User & { roles: { storeName: string; function: $Enums.Functions }[] }): Função {
-  const func = roles.sort((a, b) => {
-    if (a.function > b.function) {
-      return -1;
-    }
-    if (a.function < b.function) {
-      return 1;
-    }
-    return 0;
-  })[0].function;
-
-  return functionTranslator(func);
-}
