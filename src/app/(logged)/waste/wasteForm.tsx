@@ -35,7 +35,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
-import { User, ProductWaste as Waste } from "@prisma/client";
+import { ProductWaste as Waste } from "@prisma/client";
+import { RoledUser as User } from "@/lib/types";
 
 const FormSchema = z.object({
   amount: z
@@ -52,7 +53,8 @@ const FormSchema = z.object({
   productId: z
     .number({
       required_error: "Selecione o produto",
-    })
+    }),
+  storeId: z.string()
 });
 
 export default function WasteForm({
@@ -114,7 +116,7 @@ export default function WasteForm({
           cn(
             "flex flex-col flex-nowrap",
             "items-center justify-start",
-            "space-y-8 px-8 py-8",
+            "space-y-4 px-8 py-8",
             "lg:max-w-[500px] w-full",
             "lg:max-h-full",
           )
@@ -215,6 +217,78 @@ export default function WasteForm({
               </FormItem>
             )}
           />
+          {
+            user.roles.length > 1 ? (
+              <FormField
+                control={form.control}
+                name="storeId"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col w-full">
+                    <FormLabel>Loja</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {
+                              field.value
+                                ? user.roles.find(
+                                  (store) => store.storeId === field.value
+                                )?.storeName
+                                : "Selecionar Produto"
+                            }
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="">
+                        <Command>
+                          <CommandInput placeholder="Procurar produto..." />
+                          <CommandList>
+                            <CommandEmpty>No store found.</CommandEmpty>
+                            <CommandGroup>
+                              {user.roles.map((store) => (
+                                <CommandItem
+                                  value={store.storeName}
+                                  key={store.storeId}
+                                  onSelect={() => {
+                                    form.setValue("storeId", store.storeId);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      store.storeId === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {store.storeName}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <>
+                {
+                  form.setValue("storeId", user.roles[0].storeId)
+                }
+              </>
+            )
+          }
           <FormField
             control={form.control}
             name="date"
