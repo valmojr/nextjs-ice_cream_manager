@@ -21,11 +21,10 @@ export default function loggedLayout({
     <>
       <LoggedLayoutTopMenu user={user} />
       <div className={cn(
-          "flex lg:flex-row flex-col flex-nowrap",
-          "py-4 pt-16 px-4",
-          "items-center justify-center",
-          "w-full h-full"
-        )}>
+        "flex lg:flex-row flex-col flex-nowrap",
+        "h-fit w-full",
+        "justify-center items-center"
+      )}>
         {children}
       </div>
     </>

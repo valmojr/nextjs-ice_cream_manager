@@ -63,18 +63,18 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
   }
 
   return (
-    <Card className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none px-2 py-2 gap-2 justify-between items-center")}>
-      <div className="flex flex-row flex-nowrap items-center w-full h-full gap-3">
+    <div className={cn("flex flex-row flex-nowrap w-full h-fit rounded-none p-2 gap-2 justify-between items-center border shadow-xl")}>
+      <div className="flex flex-row flex-nowrap items-center w-full h-full md:gap-4 gap-2">
         <Link href={"/main"}>
           <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg", "bg-primary p-2")}>
-            <AppLogo size={28} className="stroke-background" />
+            <AppLogo className="stroke-background" />
           </div>
         </Link>
         {
           user.roles.length > 0 ? navItems.map(item => {
             return <Link href={item.href} key={item.label}>
               <div className={cn(
-                "flex flex-row flex-nowrap w-fit p-2 rounded-md gap-2",
+                "flex flex-row flex-nowrap w-fit p-2 rounded-md lg:gap-2 xl:px-4",
                 "cursor-pointer",
                 "items-center justify-center",
                 pathname === item.href ?
@@ -125,6 +125,6 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
           </SheetContent>
         </Sheet>
       </div>
-    </Card>
+    </div>
   );
 }
