@@ -1,6 +1,11 @@
 import { $Enums, User } from "@prisma/client";
 
-type Função = "Administrador" | "Proprietário" | "Gerente" | "Encarregado" | "Funcionário";
+type Função =
+  | "Administrador"
+  | "Proprietário"
+  | "Gerente"
+  | "Encarregado"
+  | "Funcionário";
 
 export function functionTranslator(functionEnum: $Enums.Functions): Função {
   switch (functionEnum) {
@@ -19,7 +24,9 @@ export function functionTranslator(functionEnum: $Enums.Functions): Função {
 
 export function getHighestRole({
   roles,
-}: User & { roles: { storeName: string; function: $Enums.Functions }[] }): Função {
+}: User & {
+  roles: { storeName: string; function: $Enums.Functions }[];
+}): Função {
   const func = roles.sort((a, b) => {
     if (a.function > b.function) {
       return -1;
@@ -33,18 +40,26 @@ export function getHighestRole({
   return functionTranslator(func);
 }
 
-export function isAdmin(user: User & { roles: { storeName: string, function: $Enums.Functions }[] }) {
+export function isAdmin(
+  user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
+) {
   return getHighestRole(user) === "Administrador";
 }
 
-export function isOwner(user: User & { roles: { storeName: string, function: $Enums.Functions }[] }) {
-  return getHighestRole(user) === "Proprietário" || getHighestRole(user) === "Administrador";
+export function isOwner(
+  user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
+) {
+  return getHighestRole(user) === "Proprietário";
 }
 
-export function isManager(user: User & { roles: { storeName: string, function: $Enums.Functions }[] }) {
+export function isManager(
+  user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
+) {
   return getHighestRole(user) === "Gerente";
 }
 
-export function isComissioner(user: User & { roles: { storeName: string, function: $Enums.Functions }[] }) {
+export function isComissioner(
+  user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
+) {
   return getHighestRole(user) === "Encarregado";
 }
