@@ -37,7 +37,7 @@ export default function LoginForm() {
             description: "Logado com Sucesso",
           });
 
-          router.push('/dashboard');
+          router.push('/main');
         } else if (data.status === 401) {
           toast({
             description: "Usuário ou senha inválido",
