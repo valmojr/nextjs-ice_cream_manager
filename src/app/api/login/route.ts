@@ -33,6 +33,7 @@ export async function POST(request: Request) {
       });
 
       return {
+        storeId: store?.id as string,
         storeName: store?.name as string,
         function: role.function,
       };
