@@ -49,17 +49,29 @@ export function isAdmin(
 export function isOwner(
   user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
 ) {
-  return getHighestRole(user) === "Proprietário";
+  return (
+    getHighestRole(user) === "Proprietário" ||
+    getHighestRole(user) === "Administrador"
+  );
 }
 
 export function isManager(
   user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
 ) {
-  return getHighestRole(user) === "Gerente";
+  return (
+    getHighestRole(user) === "Gerente" ||
+    getHighestRole(user) === "Proprietário" ||
+    getHighestRole(user) === "Administrador"
+  );
 }
 
 export function isComissioner(
   user: User & { roles: { storeName: string; function: $Enums.Functions }[] }
 ) {
-  return getHighestRole(user) === "Encarregado";
+  return (
+    getHighestRole(user) === "Encarregado" ||
+    getHighestRole(user) === "Gerente" ||
+    getHighestRole(user) === "Proprietário" ||
+    getHighestRole(user) === "Administrador"
+  );
 }
