@@ -12,6 +12,20 @@ export default function UnloggedLayout({
   const authToken = cookies().get('authToken')?.value;
 
   if (authToken) {
+    try {
+      const parsedCookie = JSON.parse(authToken)
+      const expirationDate = new Date(parsedCookie?.expires);
+
+      if (isNaN(expirationDate.getTime())) {
+        throw new Error("Invalid date");
+      }
+
+      if (expirationDate < new Date()) {
+        throw new Error("Expired token");
+      }
+    } catch (error) {
+      console.log('error parsing cookie: ', error);
+    }
     redirect('/dashboard');
   }
 
@@ -19,7 +33,7 @@ export default function UnloggedLayout({
     <section className="flex flex-row flex-nowrap h-full w-full">
       <div className="lg:w-full flex flex-col flex-nowrap items-center justify-center w-0 bg-secondary">
         <div className="text-end">
-          <h1 className="italic lg:text-3xl text-[0px]">
+          <h1 className="italic lg:text-3xl text-[0px] font-bold">
             &quot;O Sucesso não aceita preguiça&quot;
           </h1>
           <h1 className="italic lg:text-xl text-[0px] mr-8">João Adibe</h1>

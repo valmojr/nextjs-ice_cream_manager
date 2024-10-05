@@ -1,4 +1,4 @@
-import { cn, getUserFromToken } from "@/lib/utils";
+import { getUserFromToken } from "@/lib/utils";
 import WasteChart from "./wasteChart";
 import prisma from "@/lib/database";
 import { cookies } from "next/headers";

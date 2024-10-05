@@ -62,7 +62,7 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
   }
 
   return (
-    <div className={cn("flex flex-row flex-nowrap w-full h-fit rounded-none p-2 gap-2 justify-between items-center border shadow-xl")}>
+    <div className={cn("fixed flex flex-row flex-nowrap w-full h-fit rounded-none p-2 gap-2 justify-between items-center border shadow-xl")}>
       <div className="flex flex-row flex-nowrap items-center w-full h-full md:gap-4 gap-2">
         <Link href={"/main"}>
           <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg", "bg-primary p-2")}>
@@ -85,12 +85,12 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
               </div>
             </Link>
           }) :
-          <div className={cn("flex flex-row flex-nowrap","items-center justify-center","bg-red-500 w-full h-10 rounded-lg")}>
-            <h1 className="text-xl text-white">
-              Usuário não autorizado
-            </h1>
-            <h1 className="lg:text-xl text-[0px] text-white">{", contate um administrador"}</h1>
-          </div>
+            <div className={cn("flex flex-row flex-nowrap", "items-center justify-center", "bg-red-500 w-full h-10 rounded-lg")}>
+              <h1 className="text-xl text-white">
+                Usuário não autorizado
+              </h1>
+              <h1 className="lg:text-xl text-[0px] text-white">{", contate um administrador"}</h1>
+            </div>
         }
       </div>
       <div className="flex flex-row flex-nowrap items-center gap-3">

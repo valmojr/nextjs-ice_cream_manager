@@ -12,7 +12,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getAllProducts } from "@/app/api/product/functions";
- 
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 export default async function WasteChart() {
   const categories = await getAllProductCategories();
   const products = await getAllProducts();
@@ -60,13 +62,14 @@ export default async function WasteChart() {
       dateObject[productId] = amount;
     }
 
-    return result;
+    return result.sort((a, b) => b.date.getTime() - a.date.getTime());;
   }
 
   const tableData = transformData(filteredWastes);
 
   return (
-    <Table>
+    <ScrollArea className="h-[800px]">
+      <Table className={cn("w-fit")}>
         <TableHeader>
           <TableRow>
             <TableHead>Data</TableHead>
@@ -97,5 +100,6 @@ export default async function WasteChart() {
           })}
         </TableBody>
       </Table>
+    </ScrollArea>
   )
 }
