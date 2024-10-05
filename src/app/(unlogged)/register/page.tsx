@@ -16,13 +16,13 @@ export default function RegisterPage() {
   const router = useRouter();
 
   const registerFormSchema = z.object({
-    username: z.string().min(6).max(40),
-    email: z.string().email(),
+    username: z.string().min(6, { message: "Usuário muito curto" }).max(40, { message: "Usuário muito grande" }),
+    email: z.string().email({ message: "Email inválido" }),
     displayname: z.string(),
-    password: z.string().min(8).max(100),
+    password: z.string().min(8, { message: "Senha muito curta" }).max(100, { message: "Senha muito grande" }),
     confirmPassword: z.string(),
   }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "As senhas precisam ser iguais",
     path: ["confirmPassword"],
   });
 
@@ -65,7 +65,7 @@ export default function RegisterPage() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Usuário</FormLabel>
                 <FormControl>
                   <Input placeholder="username" {...field} />
                 </FormControl>

@@ -13,8 +13,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
-    username: z.string().min(2).max(50),
-    password: z.string().min(8).max(100)
+    username: z.string({ message: "Usuário é necessário" }).min(2, { message: "Usuário muito curto" }).max(50, { message: "Usuário muito grande" }),
+    password: z.string({ message: "Senha é necessário" }).min(8, { message: "Senha muito curta" }).max(100, { message: "Senha muito grande" }),
   });
 
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
@@ -71,7 +71,7 @@ export default function LoginForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Usuário</FormLabel>
                 <FormControl>
                   <Input placeholder="username" {...field} />
                 </FormControl>
@@ -84,7 +84,7 @@ export default function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <Input placeholder="password" type={'password'} {...field} />
                 </FormControl>
