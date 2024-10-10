@@ -23,9 +23,9 @@ export default function loggedLayout({
       <LoggedLayoutTopMenu user={user} />
       <div className={cn(
         "flex lg:flex-row flex-col flex-nowrap",
-        "h-full w-full",
+        "h-screen w-full",
         "justify-center items-start",
-        "mt-16",
+        "pt-[61px]"
       )}>
         {children}
       </div>

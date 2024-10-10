@@ -62,7 +62,7 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
   }
 
   return (
-    <div className={cn("fixed flex flex-row flex-nowrap w-full h-fit rounded-none p-2 gap-2 justify-between items-center border shadow-xl")}>
+    <div className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none p-2 gap-2 justify-between items-center border shadow-xl")}>
       <div className="flex flex-row flex-nowrap items-center w-full h-full md:gap-4 gap-2">
         <Link href={"/main"}>
           <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg", "bg-primary p-2")}>

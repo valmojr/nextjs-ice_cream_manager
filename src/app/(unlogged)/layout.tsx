@@ -1,7 +1,5 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import AppLogo from "../../../public/svg/AppLogo";
 
 export default function UnloggedLayout({
@@ -9,26 +7,6 @@ export default function UnloggedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const authToken = cookies().get('authToken')?.value;
-
-  if (authToken) {
-    try {
-      const parsedCookie = JSON.parse(authToken)
-      const expirationDate = new Date(parsedCookie?.expires);
-
-      if (isNaN(expirationDate.getTime())) {
-        throw new Error("Invalid date");
-      }
-
-      if (expirationDate < new Date()) {
-        throw new Error("Expired token");
-      }
-    } catch (error) {
-      console.log('error parsing cookie: ', error);
-    }
-    redirect('/dashboard');
-  }
-
   return (
     <section className="flex flex-row flex-nowrap h-full w-full">
       <div className="lg:w-full flex flex-col flex-nowrap items-center justify-center w-0 bg-secondary">

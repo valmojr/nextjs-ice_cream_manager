@@ -1,8 +1,5 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { checkToken } from "@/lib/CheckToken";
 
 export default function Home() {
-  const authentication = cookies().get('authToken')?.value;
-
-  return authentication ? redirect('/main') : redirect('login');
+  return checkToken();
 }

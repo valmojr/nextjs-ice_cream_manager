@@ -24,7 +24,6 @@ export default function RootLayout({
           inter.className,
           "flex flex-row flex-wrap max-h-screen h-screen w-full",
           "items-start justify-center",
-          "overflow-hidden"
         )}
       >
         <ThemeProvider

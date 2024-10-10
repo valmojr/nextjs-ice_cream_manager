@@ -4,16 +4,14 @@ import { ProductWaste as Waste } from '@prisma/client';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { getAllProducts } from "@/app/api/product/functions";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default async function WasteChart() {
   const categories = await getAllProductCategories();
@@ -68,7 +66,7 @@ export default async function WasteChart() {
   const tableData = transformData(filteredWastes);
 
   return (
-    <ScrollArea className="h-[800px]">
+    <ScrollArea className="h-full border">
       <Table className={cn("w-fit")}>
         <TableHeader>
           <TableRow>
@@ -79,7 +77,7 @@ export default async function WasteChart() {
               )[0];
               return (
                 <TableHead
-                  key={product.id || ""}
+                  key={product.id || ""} className={cn("text-center font-bold")}
                 >{`${product.name}`}</TableHead>
               );
             })}
@@ -92,7 +90,7 @@ export default async function WasteChart() {
                 <TableCell>{formatDate(waste.date)}</TableCell>
                 {products.map((product) => {
                   return (
-                    <TableCell key={product.id}>{waste[product.id]}</TableCell>
+                    <TableCell key={product.id} className="text-center">{waste[product.id]}</TableCell>
                   );
                 })}
               </TableRow>
@@ -100,6 +98,7 @@ export default async function WasteChart() {
           })}
         </TableBody>
       </Table>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   )
 }
