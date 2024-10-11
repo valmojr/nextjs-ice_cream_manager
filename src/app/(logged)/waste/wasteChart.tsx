@@ -66,8 +66,8 @@ export default async function WasteChart() {
   const tableData = transformData(filteredWastes);
 
   return (
-    <ScrollArea className="h-full border">
-      <Table className={cn("w-fit")}>
+    <ScrollArea className="h-full w-full border">
+      <Table className={cn("w-full")}>
         <TableHeader>
           <TableRow>
             <TableHead>Data</TableHead>
