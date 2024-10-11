@@ -21,5 +21,7 @@ export function checkToken() {
       fetch("/api/logout");
       return redirect("/login");
     }
+  } else {
+    return redirect("/login");
   }
 }
