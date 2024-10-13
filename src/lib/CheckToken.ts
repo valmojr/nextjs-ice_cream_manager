@@ -15,8 +15,6 @@ export function checkToken() {
         cookies().delete("authToken");
         return redirect("login");
       }
-
-      return redirect("/main");
     } catch (error) {
       fetch("/api/logout");
       return redirect("/login");
