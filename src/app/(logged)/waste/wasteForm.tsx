@@ -117,8 +117,9 @@ export default function WasteForm({
             "flex flex-col flex-nowrap",
             "items-center justify-start",
             "space-y-4 px-8 py-8",
-            "lg:max-w-[500px] w-full",
-            "lg:max-h-full",
+            "lg:max-w-[450px] w-full",
+            "h-full",
+            "shadow-2xl"
           )
         }>
           <FormLabel className="lg:text-3xl text-2xl">Registrar Desperdícios</FormLabel>
