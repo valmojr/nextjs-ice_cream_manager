@@ -66,18 +66,18 @@ export default async function WasteChart() {
   const tableData = transformData(filteredWastes);
 
   return (
-    <ScrollArea className="h-full w-full border">
+    <ScrollArea className="lg:h-full lg:w-full h-[0px] w-[0px] border">
       <Table className={cn("w-full")}>
         <TableHeader>
           <TableRow>
-            <TableHead>Data</TableHead>
+            <TableHead className="bg-primary text-secondary text-center font-bold">Data</TableHead>
             {products.map((product) => {
               const category = categories.filter(
                 (category) => category.id === product.productCategoryId
               )[0];
               return (
                 <TableHead
-                  key={product.id || ""} className={cn("text-center font-bold")}
+                  key={product.id || ""} className={cn("bg-primary text-secondary text-center font-bold")}
                 >{`${product.name}`}</TableHead>
               );
             })}
