@@ -331,7 +331,7 @@ export default function WasteForm({
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full gap-2 cursor-pointer">
+          <Button type="submit" className="w-full gap-2 cursor-pointer h-14">
             <ClipboardPenLine />
             Anotar
           </Button>
