@@ -1,7 +1,7 @@
-import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
 
 export default async function StorageCount() {
-  return <Suspense fallback={<h1>Loading...</h1>}>
+  return <Card className="w-full">
     <h1>Storage Count</h1>
-  </Suspense>
-}
+  </Card>
+  }
