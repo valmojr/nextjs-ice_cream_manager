@@ -10,14 +10,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { cn, parseAvatarFallbackName } from "@/lib/utils";
-import { $Enums, User } from "@prisma/client";
 import { Coins, LayoutDashboard, LogOut, Package2, Settings, Trash2, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import AppLogo from "../../../public/svg/AppLogo";
 import { functionTranslator, getHighestRole } from "@/lib/authorization";
+import { RoledUser } from "@/lib/types";
 
-export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { storeName: string, function: $Enums.Functions }[] } }) {
+export default function LoggedLayoutTopMenu({ user }: { user: RoledUser }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -62,8 +62,8 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
   }
 
   return (
-    <div className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none p-2 gap-2 justify-between items-center border shadow-xl")}>
-      <div className="flex flex-row flex-nowrap items-center w-full h-full md:gap-4 gap-2">
+    <div className={cn("absolute flex flex-row flex-nowrap w-full h-fit rounded-none p-2 md:gap-2 gap-0 justify-between items-center border shadow-xl")}>
+      <div className="flex flex-row flex-nowrap items-center w-full h-full md:gap-4 sm:gap-2 gap-0">
         <Link href={"/main"}>
           <div className={cn("flex flex-rol flex-nowrap items-center justify-center rounded-lg", "bg-primary p-2")}>
             <AppLogo className="stroke-background" />
@@ -115,7 +115,7 @@ export default function LoggedLayoutTopMenu({ user }: { user: User & { roles: { 
                   })
               }
             </div>
-            <SheetFooter className="flex flex-col sm:flex-col">
+            <SheetFooter className="flex flex-col">
               <Button className="w-full flex items-center gap-2" onClick={() => onLogout()}>
                 <LogOut className="h-4 w-4" />
                 Logout
