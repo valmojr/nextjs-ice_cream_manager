@@ -57,6 +57,8 @@ model Product {
   productCount      ProductCount[]
   productCategoryId Int
   productWaste      ProductWaste[]
+  countable         Boolean         @default(true)
+  wastable          Boolean         @default(false)
 }
 
 model ProductCategory {
