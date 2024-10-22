@@ -37,7 +37,7 @@ export async function StoreSection({ store }: { store: Store }) {
       const me = requester.id === user.id;
 
       return (
-        <Link href={"user/" + employee.id} key={employee.id}>
+        <Link href={"user/" + employee.userId} key={employee.id}>
           <Card className="flex flex-row flex-nowrap items-center m-4 p-4 gap-4 bg-primary-foreground cursor-pointer">
             <Avatar>
               <AvatarFallback>{parseAvatarFallbackName(user)}</AvatarFallback>
