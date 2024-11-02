@@ -11,9 +11,13 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getUserFromToken(token: string) {
-  return jwt.verify(token, process.env.JWT_SECRET || "", {
-    complete: false,
-  });
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET || "", {
+      complete: false,
+    });
+  } catch (error) {
+    redirect("/login");
+  }
 }
 
 export function parseAvatarFallbackName(user: User) {
