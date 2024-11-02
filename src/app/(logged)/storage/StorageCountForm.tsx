@@ -35,7 +35,7 @@ type ProductCount = {
 };
 
 
-export default function StorageCountForm({ stores, products }: { stores: Store[], products: Product[], categories: ProductCategory[] }) {
+export default function StorageCountForm({ stores, products, categories }: { stores: Store[], products: Product[], categories: ProductCategory[] }) {
   const selectStoreSchema = z.object({
     selectedStore: z.string({ message: "Selecione uma loja para continuar" }),
   });
@@ -109,6 +109,26 @@ export default function StorageCountForm({ stores, products }: { stores: Store[]
     "border")}>
     {(selectedStore ? (<>
       <ScrollArea className="w-full h-full">
+        {categories.map((category) => {
+          const categoryProducts = products.filter((product) => {
+            return product.productCategoryId === category.id
+          });
+
+          return <>
+            {
+              categoryProducts.length > 0 &&
+              <>
+              <div className="flex flex-row flex-nowrap items-center justify-center bg-foreground py-1">
+                <h1 className="text-2xl text-background">{category.name}</h1>
+              </div>
+              {categoryProducts.map((product) => {
+                return <ProductFrame key={product.id} product={product} />
+              })
+              }</>
+            }
+          </>
+        }
+        )}
         {products.map((product) => (
           <ProductFrame key={product.id} product={product} />
         ))}
