@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from "@/lib/utils";
-import { Product, Store } from "@prisma/client";
+import { Product, ProductCategory, Store } from "@prisma/client";
 import { useState } from "react";
 import {
   Select,
@@ -16,6 +16,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { MinusCircle, PlusCircle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 type ProductCount = {
   productId: number;
@@ -23,7 +35,7 @@ type ProductCount = {
 };
 
 
-export default function StorageCountForm({ stores, products }: { stores: Store[], products: Product[] }) {
+export default function StorageCountForm({ stores, products }: { stores: Store[], products: Product[], categories: ProductCategory[] }) {
   const selectStoreSchema = z.object({
     selectedStore: z.string({ message: "Selecione uma loja para continuar" }),
   });
@@ -68,9 +80,9 @@ export default function StorageCountForm({ stores, products }: { stores: Store[]
       "flex flex-row flex-nowrap justify-between items-center",
       "w-full h-fit px-8 py-4",
       "border")}>
-      <h1 className="text-2xl">{product.name}</h1>
+      <h1 className="lg:text-lg text-2xl">{product.name}</h1>
       <div className="flex flex-row gap-4">
-        <div className={cn("text-2xl w-20 h-14 bg-foreground text-background rounded-md", " flex flex-row flex-nowrap items-center justify-center")}>
+        <div className={cn("lg:text-xl text-2xl lg:w-16 lg:h-10 w-20 h-14 bg-foreground text-background rounded-md", " flex flex-row flex-nowrap items-center justify-center")}>
           {currentCount}
         </div>
         <button onClick={addCount}><PlusCircle size={48} /></button>
@@ -93,18 +105,36 @@ export default function StorageCountForm({ stores, products }: { stores: Store[]
   }
   return <div className={cn(
     "flex flex-col flex-nowrap justify-center items-center",
-    "w-full h-full lg:max-w-[600px]",
+    "w-full h-full lg:max-w-[500px]",
     "border")}>
     {(selectedStore ? (<>
-      {products.map((product) => (
-        <ProductFrame key={product.id} product={product} />
-      ))}
-      <Button
-        onClick={submitCount}
-        className={cn("h-12 w-48 mt-4", "bg-foreground text-background text-2xl")}
-      >
-        Confirmar
-      </Button>
+      <ScrollArea className="w-full h-full">
+        {products.map((product) => (
+          <ProductFrame key={product.id} product={product} />
+        ))}
+      </ScrollArea>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="default" className="text-xl h-14 w-40 my-4">Confirmar</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Deseja finalizar a contagem?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Produtos:
+              <ul>
+                {productCount.map((count) => (
+                  <li key={count.productId}>{products.find((product) => product.id === count.productId)?.name} - {count.count}</li>
+                ))}
+              </ul>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogAction>Confirmar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>) : (<Form {...selectStoreForm}>
       <form onSubmit={selectStoreForm.handleSubmit(onSubmitStoreSelection)} className="w-2/3 space-y-6">
         <FormField

@@ -1,7 +1,9 @@
+import { getAllStorageCountByStoreId } from "@/app/api/storageCount/functions";
 import { Card } from "@/components/ui/card";
 
 export default async function StorageCount() {
-  return <Card className="w-full">
-    <h1>Storage Count</h1>
+  const mostRecentStorageCount = await getAllStorageCountByStoreId("1");
+  return <Card className="lg:w-full w-[0px]">
+    <h1 className="lg:text-2xl text-[0px]">{JSON.stringify(mostRecentStorageCount)}</h1>
   </Card>
   }
