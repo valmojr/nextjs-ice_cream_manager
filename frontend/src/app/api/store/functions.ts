@@ -11,3 +11,11 @@ export async function getAllStores(userId: string) {
     },
   });
 }
+
+export async function getStoreFromId(id: string) {
+  return await prisma.store.findUnique({
+    where: {
+      id,
+    }
+  })
+}
