@@ -6,6 +6,7 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DATABASE}
+            JWT_SECRET: ${JWT_SECRET}
         ports:
             - '5432:5432'
     backend:
@@ -15,11 +16,13 @@ services:
         ports:
         - "3001:3001"
         environment:
-        - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
+            DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DATABASE}
+            JWT_SECRET: ${JWT_SECRET}
         depends_on:
         - database
         volumes:
         - ./backend:/app
+        - ./prisma:/app/prisma
         - /app/node_modules
         command: sh -c "npm install && npm run start:dev"
     frontend:
@@ -29,11 +32,14 @@ services:
         ports:
         - "3000:3000"
         environment:
+            DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DATABASE}
             NEXT_PUBLIC_API_URL: "http://localhost:3001"
+            JWT_SECRET: ${JWT_SECRET}
         depends_on:
         - backend
         - database
         volumes:
         - ./frontend:/app
+        - ./prisma:/app/prisma
         - /app/node_modules
         command: sh -c "npm install && npm run dev"
