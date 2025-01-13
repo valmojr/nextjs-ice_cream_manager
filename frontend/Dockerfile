@@ -1,5 +1,5 @@
 # Use Node.js LTS as the base image
-FROM node:18-alpine
+FROM node:23-alpine
 
 WORKDIR /app
 
@@ -14,6 +14,9 @@ COPY . .
 
 # Expose the port
 EXPOSE 3000
+
+# Install OpenSSL
+RUN apk add --no-cache openssl
 
 # Default command to start the app
 CMD ["npm", "run", "dev"]
