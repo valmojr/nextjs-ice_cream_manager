@@ -1,6 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
+  output        = "./generated/client"
 }
 
 datasource db {
@@ -9,25 +10,27 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  email        String         @unique
-  username     String         @unique
-  password     String
-  displayname  String?
-  ProductWaste ProductWaste[]
-  roles        Role[]
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  email             String            @unique
+  username          String            @unique
+  password          String
+  displayname       String?
+  ProductWaste      ProductWaste[]
+  roles             Role[]
+  cashierRegistries CashierRegistry[]
 }
 
 model Store {
-  id           String         @id @default(cuid())
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  name         String
-  ProductWaste ProductWaste[]
-  roles        Role[]
-  StorageCount StorageCount[]
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  name            String
+  ProductWaste    ProductWaste[]
+  roles           Role[]
+  StorageCount    StorageCount[]
+  cashierRegistry CashierRegistry[]
 }
 
 model Role {
@@ -97,10 +100,30 @@ model ProductWaste {
   provider  User     @relation(fields: [userId], references: [id])
 }
 
+model CashierRegistry {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  date       DateTime @default(now())
+  value      Float
+  recorder   User     @relation(fields: [recorderId], references: [id])
+  recorderId String
+  store      Store    @relation(fields: [storeId], references: [id])
+  storeId    String
+}
+
 enum Functions {
   Administrator
   Owner
   Manager
   Comissioner
   Employee
+}
+
+enum CashierRegistryType {
+  Personnel
+  Cleaning
+  infrastructure
+  Withdraw
+  Other
 }
