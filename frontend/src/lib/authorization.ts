@@ -6,7 +6,7 @@ type Função =
   | "Gerente"
   | "Encarregado"
   | "Funcionário";
-  
+
 export function functionTranslator(functionEnum: $Enums.Functions): Função {
   switch (functionEnum) {
     case $Enums.Functions.Administrator:
@@ -27,6 +27,10 @@ export function getHighestRole({
 }: User & {
   roles: { storeName: string; function: $Enums.Functions }[];
 }): Função {
+  if (roles.length < 1) {
+    return "Funcionário" 
+  };
+
   const func = roles.sort((a, b) => {
     if (a.function < b.function) {
       return -1;
