@@ -1,7 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl"]
-  output        = "./generated/client"
+  binaryTargets = ["native", "linux-musl", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -17,9 +16,9 @@ model User {
   username          String            @unique
   password          String
   displayname       String?
+  cashierRegistries CashierRegistry[]
   ProductWaste      ProductWaste[]
   roles             Role[]
-  cashierRegistries CashierRegistry[]
 }
 
 model Store {
@@ -27,10 +26,10 @@ model Store {
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   name            String
+  cashierRegistry CashierRegistry[]
   ProductWaste    ProductWaste[]
   roles           Role[]
   StorageCount    StorageCount[]
-  cashierRegistry CashierRegistry[]
 }
 
 model Role {
@@ -101,15 +100,17 @@ model ProductWaste {
 }
 
 model CashierRegistry {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  date       DateTime @default(now())
-  value      Float
-  recorder   User     @relation(fields: [recorderId], references: [id])
-  recorderId String
-  store      Store    @relation(fields: [storeId], references: [id])
-  storeId    String
+  id          Int                 @id @default(autoincrement())
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  date        DateTime            @default(now())
+  value       Float
+  description String
+  type        CashierRegistryType @default(Other)
+  recorderId  String
+  storeId     String
+  recorder    User                @relation(fields: [recorderId], references: [id])
+  store       Store               @relation(fields: [storeId], references: [id])
 }
 
 enum Functions {

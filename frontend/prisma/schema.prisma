@@ -1,0 +1,130 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  email             String            @unique
+  username          String            @unique
+  password          String
+  displayname       String?
+  cashierRegistries CashierRegistry[]
+  ProductWaste      ProductWaste[]
+  roles             Role[]
+}
+
+model Store {
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  name            String
+  cashierRegistry CashierRegistry[]
+  ProductWaste    ProductWaste[]
+  roles           Role[]
+  StorageCount    StorageCount[]
+}
+
+model Role {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  function  Functions
+  storeId   String?
+  userId    String
+  store     Store?    @relation(fields: [storeId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id                Int             @id @default(autoincrement())
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  name              String
+  productCategoryId Int
+  countable         Boolean         @default(true)
+  wastable          Boolean         @default(false)
+  category          ProductCategory @relation(fields: [productCategoryId], references: [id])
+  productCount      ProductCount[]
+  productWaste      ProductWaste[]
+}
+
+model ProductCategory {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  products  Product[]
+}
+
+model ProductCount {
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  amount         Int
+  productId      Int
+  storageCountId Int?
+  product        Product       @relation(fields: [productId], references: [id])
+  storageCount   StorageCount? @relation(fields: [storageCountId], references: [id])
+}
+
+model StorageCount {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  date         DateTime
+  storeId      String
+  productCouts ProductCount[]
+  store        Store          @relation(fields: [storeId], references: [id])
+}
+
+model ProductWaste {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  amount    Int
+  date      DateTime
+  productId Int
+  userId    String
+  storeId   String
+  product   Product  @relation(fields: [productId], references: [id])
+  store     Store    @relation(fields: [storeId], references: [id])
+  provider  User     @relation(fields: [userId], references: [id])
+}
+
+model CashierRegistry {
+  id          Int                 @id @default(autoincrement())
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  date        DateTime            @default(now())
+  value       Float
+  description String
+  type        CashierRegistryType @default(Other)
+  recorderId  String
+  storeId     String
+  recorder    User                @relation(fields: [recorderId], references: [id])
+  store       Store               @relation(fields: [storeId], references: [id])
+}
+
+enum Functions {
+  Administrator
+  Owner
+  Manager
+  Comissioner
+  Employee
+}
+
+enum CashierRegistryType {
+  Personnel
+  Cleaning
+  infrastructure
+  Withdraw
+  Other
+}

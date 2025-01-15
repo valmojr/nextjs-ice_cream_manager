@@ -22,7 +22,6 @@ services:
         - database
         volumes:
         - ./backend:/app
-        - ./prisma:/app/prisma
         - /app/node_modules
         command: sh -c "npm install && npm run start:dev"
     frontend:
@@ -31,6 +30,7 @@ services:
             dockerfile: Dockerfile
         ports:
         - "3000:3000"
+        - "5555:5555"
         environment:
             DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DATABASE}
             NEXT_PUBLIC_API_URL: "http://localhost:3001"
@@ -40,6 +40,5 @@ services:
         - database
         volumes:
         - ./frontend:/app
-        - ./prisma:/app/prisma
         - /app/node_modules
         command: sh -c "npm install && npm run dev"
